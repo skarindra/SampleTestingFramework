@@ -12,7 +12,15 @@ public enum Id implements Supplier<By> {
     LOGIN("login-button"),
     USERNAME("user-name"),
     PASSWORD("password"),
-    INVENTORY_CONTAINER("inventory_container")
+    INVENTORY_CONTAINER("inventory_container"),
+
+    ADD_TO_CART_BACKPACK("add-to-cart-sauce-labs-backpack"),
+    CHECKOUT("checkout"),
+    FIRST_NAME("first-name"),
+    LAST_NAME("last-name"),
+    ZIP_CODE("postal-code"),
+    CHECKOUT_CONTINUE("continue"),
+    CHECKOUT_FINISH("finish")
     ;
 
     private final By by;

@@ -14,8 +14,8 @@ public enum LinkText implements Supplier<By> {
 
     ALL_ITEMS("All items"),
     ABOUT("About"),
-    LOGOUT("Logout"),
-    RESET("Reset App State");
+    LOGOUT("LOGOUT"),
+    RESET("RESET APP STATE");
 
     private final By by;
 

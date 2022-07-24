@@ -4,7 +4,8 @@ import com.one.framework.Browser;
 import org.apache.commons.lang3.StringUtils;
 import org.openqa.selenium.TimeoutException;
 
-import static com.one.locators.ClassName.PRODUCT_LABEL;
+import static com.one.locators.ClassName.*;
+import static com.one.locators.Id.ADD_TO_CART_BACKPACK;
 
 public class Inventory {
 
@@ -23,8 +24,12 @@ public class Inventory {
             return browser.getText(PRODUCT_LABEL);
         }
 
+        public void clickAddToCartBackpack() {
+            browser.click(ADD_TO_CART_BACKPACK);
+        }
 
-
-
+        public void clickShoppingCart() {
+            browser.click(SHOPPING_CART);
+        }
 
 }

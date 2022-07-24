@@ -40,7 +40,7 @@ public class ProductsContent {
         return getProductsList().get(row);
     }
 
-    private List<Product> getProductsList() {
+    public List<Product> getProductsList() {
         List<Product> rows = new ArrayList<>();
         browser.await(INVENTORY_LIST).findElements(INVENTORY_ITEM).forEach(content -> {
                     String text = content.toString();
