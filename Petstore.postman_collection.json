@@ -1,0 +1,513 @@
+{
+	"info": {
+		"_postman_id": "db17f60c-26e2-4a62-b3ab-398147d5dbd1",
+		"name": "Petstore",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Add New Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"The response has all properties\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.id).to.be.a('number');",
+							"    pm.expect(responseJson.category.id).to.be.a('number');",
+							"    pm.expect(responseJson.category.name).to.be.a('string');",
+							"    pm.expect(responseJson.category.name).to.eql('reptile');",
+							"    pm.expect(responseJson.name).to.be.a('string');",
+							"    pm.expect(responseJson.name).to.eql('crocodile');",
+							"    pm.expect(responseJson.photoUrls).to.be.an('Array');",
+							"    pm.expect(responseJson.photoUrls).to.include('https://www.freepik.com/free-photo/wild-caiman-with-fish-mouth-nature-habitat-wild-brasil-brasilian-wildlife-pantanal-green-jungle-south-american-nature-wild-dangereous_28920743.htm');",
+							"    const tags = responseJson.tags.find(a => a.name === \"crocodile\");",
+							"    pm.expect(tags).to.be.an('object');",
+							"    pm.expect(tags.id).to.be.a('number');",
+							"    pm.expect(tags.name).to.be.a('string');",
+							"    pm.expect(responseJson.status).to.be.a('string');",
+							"    pm.expect(responseJson.status).to.eql('available');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": 0,\n  \"category\": {\n    \"id\": 0,\n    \"name\": \"reptile\"\n  },\n  \"name\": \"crocodile\",\n  \"photoUrls\": [\n    \"https://www.freepik.com/free-photo/wild-caiman-with-fish-mouth-nature-habitat-wild-brasil-brasilian-wildlife-pantanal-green-jungle-south-american-nature-wild-dangereous_28920743.htm\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"crocodile\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Add New Pet Invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 500\", function () {",
+							"  pm.response.to.have.status(500);",
+							"});",
+							"",
+							"pm.test(\"The response has all properties\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.message).to.eql('something bad happened');",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"id\": \"abc\",\n  \"category\": {\n    \"id\": 0,\n    \"name\": 123\n  },\n  \"name\": 0,\n  \"photoUrls\": [\n    \"https://www.freepik.com/free-photo/wild-caiman-with-fish-mouth-nature-habitat-wild-brasil-brasilian-wildlife-pantanal-green-jungle-south-american-nature-wild-dangereous_28920743.htm\"\n  ],\n  \"tags\": [\n    {\n      \"id\": 0,\n      \"name\": \"crocodile\"\n    }\n  ],\n  \"status\": \"available\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pet By Status Available",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"One of the response has available status\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].status).to.eql('available');",
+							"});",
+							"",
+							"var jsonData = JSON.parse(responseBody);",
+							"console.log(jsonData[0].id);",
+							"pm.collectionVariables.set(\"petIdAvailable\", jsonData[0].id);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/findByStatus?status=available",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "available"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pet By Status Sold",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"One of the response has available status\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].status).to.eql('sold');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/findByStatus?status=sold",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "sold"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pet By Status Pending",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"One of the response has available status\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson[0].status).to.eql('pending');",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/findByStatus?status=pending",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "pending"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pet By Status Invalid",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"Response in array and 0 length\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson).to.be.an('array');",
+							"    pm.expect(responseJson.length).to.eql(0);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/findByStatus?status=invalid",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"findByStatus"
+					],
+					"query": [
+						{
+							"key": "status",
+							"value": "invalid"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get Pet By ID",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							"",
+							"pm.test(\"response has available status\", () => {",
+							"    const responseJson = pm.response.json();",
+							"    pm.expect(responseJson.status).to.eql('available');",
+							"    pm.expect(responseJson.id).to.eql(pm.collectionVariables.get(\"petIdAvailable\"));",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{petIdAvailable}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{petIdAvailable}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Pet Name",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "name",
+							"value": "updatedName",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{petIdAvailable}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{petIdAvailable}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update Pet Status",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "status",
+							"value": "sold",
+							"type": "default"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{petIdAvailable}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{petIdAvailable}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{petIdAvailable}}",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{petIdAvailable}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Image Pet",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"  pm.response.to.have.status(200);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "file",
+							"type": "file",
+							"src": "/Users/mapan/Downloads/cute-crocodile.jpg"
+						}
+					]
+				},
+				"url": {
+					"raw": "{{baseUrl}}/pet/{{petIdAvailable}}/uploadImage",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"pet",
+						"{{petIdAvailable}}",
+						"uploadImage"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "https://petstore.swagger.io/v2",
+			"type": "default"
+		},
+		{
+			"key": "petIdAvailable",
+			"value": "1",
+			"type": "default"
+		}
+	]
+}
